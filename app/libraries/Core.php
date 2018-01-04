@@ -11,8 +11,9 @@
         protected $params = [];
 
         public function __construct() {
-            // $this->getUrl();
+
             $url = $this->getUrl();
+                
             // Look in controllers for first value of $url
             if(file_exists('../app/controllers/'.ucwords($url[0]).'Controller.php')) {
                 // If exists, set as controller

@@ -2,6 +2,7 @@
 
     class PostController extends Controller{
         public function __construct() {
+            parent::__construct();
             $this->postModel = $this->model('Post');
         }
 

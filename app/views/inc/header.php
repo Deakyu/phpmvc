@@ -8,4 +8,4 @@
     <title><?= SITENAME; ?></title>
 </head>
 <body>
-    
+    <?php include 'nav.php'; ?>

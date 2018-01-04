@@ -51,6 +51,8 @@ body {
 }
 
 .module {
-    background: rgba(black, 0.5);
     padding: 18px;
+    &--empty {
+        background: transparent;
+    }
 }

@@ -1,5 +1,9 @@
 <?php
 
+function dd($data) {
+    die(var_dump($data));
+}
+
 function refValues($arr){
     if (strnatcmp(phpversion(),'5.3') >= 0) //Reference is required for PHP 5.3+
     {
