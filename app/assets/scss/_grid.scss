@@ -1,0 +1,56 @@
+// Simple Grid Layout inspired by css-trick article <Don't Overthink It Grids> - Chris Coyier
+// https://css-tricks.com/dont-overthink-it-grids
+
+*,
+*:after,
+*:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    color: white;
+    font-size: 18px;
+    line-height: 1.6em;
+    text-align: justify;
+}
+
+@mixin columnWidth($col) {
+    $width: ($col / 12 * 100) * 1%;
+    width: $width;
+}
+
+.grid {
+    padding-left: 18px;
+    &:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+    [class*='col-'] {
+        float: left;
+        padding-right: 18px;
+        @media (max-width: 768px) {
+            width: 100% !important;
+        }
+    }
+    .col-1 {@include columnWidth(1);}
+    .col-2 {@include columnWidth(2);}
+    .col-3 {@include columnWidth(3);}
+    .col-4 {@include columnWidth(4);}
+    .col-5 {@include columnWidth(5);}
+    .col-6 {@include columnWidth(6);}
+    .col-7 {@include columnWidth(7);}
+    .col-8 {@include columnWidth(8);}
+    .col-9 {@include columnWidth(9);}
+    .col-10 {@include columnWidth(10);}
+    .col-11 {@include columnWidth(11);}
+    .col-12 {@include columnWidth(12);}
+}
+
+.module {
+    background: rgba(black, 0.5);
+    padding: 18px;
+}

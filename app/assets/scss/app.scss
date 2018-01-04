@@ -1,4 +1,5 @@
 // Compile -> sass --watch app/assets/scss/app.scss:public/css/app.css
+@import "grid";
 
 body {
     background: red;
