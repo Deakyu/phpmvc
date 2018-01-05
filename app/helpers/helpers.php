@@ -14,3 +14,7 @@ function refValues($arr){
     }
     return $arr;
 }
+
+function redirect($page) {
+    header('Location: ' . URLROOT . '/' . $page);
+}

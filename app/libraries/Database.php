@@ -45,6 +45,10 @@
             call_user_func_array([$this->stmt, 'bind_param'],refValues($args));
         }
 
+        public function execute() {
+            return $this->stmt->execute();
+        }
+
         // Get result set as an array of objects
         public function resultSet() {
             $this->stmt->execute();
@@ -63,7 +67,8 @@
             $results = [];
             while($obj = $this->stmt->fetch_object()) {
                 $results[] = $obj;
+                break;
             }
-            return $results[0];
+            return $results;
         }
     }

@@ -2,6 +2,7 @@
 
     // Load helpers
     require_once 'helpers/helpers.php';
+    require_once 'helpers/session_helper.php';
     
     // Load Config
     require_once 'config/config.php';
