@@ -19,6 +19,7 @@ body {
 @import "form";
 
 .flash {
+    visibility: hidden;
     max-height: 0;
     padding: 0;
     margin: 0;
@@ -29,6 +30,7 @@ body {
     text-align: center;
     transition: all .3s ease-in-out;
     &.active {
+        visibility: visible;
         margin: 0 auto 24px;
         padding: 12px;
         max-height: 500px;

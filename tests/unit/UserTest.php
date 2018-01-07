@@ -1,10 +1,12 @@
 <?php 
 
+    use PHPUnit_Framework_TestCase as TestCase;
+
     require_once './app/bootstrap.php';
 
     require_once './app/models/User.php';
 
-    class UserTest extends \PHPUnit_Framework_TestCase {
+    class UserTest extends TestCase {
 
         protected $user;
 

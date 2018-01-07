@@ -8,7 +8,7 @@
         }
 
         public function index() {
-
+            
         }
 
         public function register() {
@@ -23,13 +23,18 @@
                         $response->data['email_err'] = 'Email taken by someone else!';
                         $this->view('users/register', $response->data);
                     } else {
-                        $response->data['password'] = password_hash($response->data['password'], PASSWORD_DEFAULT);
-
-                        if($this->userModel->register($response->data)) {
-                            flash('register_success', 'Registered!');
-                            redirect('user/login');
+                        if($response->data['password'] != $response->data['confirm_password']) {
+                            $response->data['confirm_password_err'] = "Passwords Don't Match!";
+                            $this->view('users/register', $response->data);
                         } else {
-                            die('Error registering..');
+                            $response->data['password'] = password_hash($response->data['password'], PASSWORD_DEFAULT);
+    
+                            if($this->userModel->register($response->data)) {
+                                flash('register_success', 'Registered!');
+                                redirect('user/login');
+                            } else {
+                                die('Error registering..');
+                            }
                         }
                     }
                 } else {
@@ -87,6 +92,7 @@
 
                 // Load view
                 $this->view('users/login', $data);
+                return true;
             }
         }
 
@@ -94,6 +100,7 @@
             $_SESSION['user_id'] = $user->id;
             $_SESSION['user_email'] = $user->email;
             $_SESSION['user_name'] = $user->name;
+            flash('login_success', "Welcome, {$_SESSION['user_name']}!");
             redirect('page/index');
         }
 
