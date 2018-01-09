@@ -34,5 +34,5 @@ window.onload = () => {
         for(var i=0 ; i < flash.length ; i++) {
             flash[i].classList.remove('active');
         }
-    }, 3000);
+    }, 5000);
 }

@@ -10,6 +10,10 @@
         protected $currentMethod = 'index';
         protected $params = [];
 
+
+        /**
+         * Gets url and call corresponding controller & method
+         */
         public function __construct() {
             $url = $this->getUrl();
                 
@@ -48,6 +52,13 @@
             call_user_func_array([$this->currentController, $this->currentMethod],$this->params);
         }
 
+        /**
+         * Sanitize $_GET['url'] and split urls into an array
+         * 
+         * $this->getUrl()
+         * 
+         * @return array $url
+         */
         public function getUrl() {
             if(isset($_GET['url'])) {
                 // removes the ending '/' if exists

@@ -7,6 +7,7 @@
         <div class="col-6">
             <div class="module">
                 <?= flash('login_success'); ?>
+                <?= flash('connection_error'); ?>
                 <h1 style="text-align:center;line-height:48px;">MVC Framework - by Deakyu Lee</h1>
                 <h4 style="text-align:center;">Built on top of Traversy MVC framework</h4>
             </div>

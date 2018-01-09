@@ -11,7 +11,14 @@
             $this->request_method = strtolower($_SERVER['REQUEST_METHOD']);
         }
 
-        // Load model
+        /**
+         * Instantiates a model in a constructor of a controller
+         * 
+         * $this->userModel = $this->model('User');
+         * 
+         * @param string $model string value of a model
+         * @return Model object
+         */
         public function model($model) {
             // Require model file
             require_once "../app/models/{$model}.php";
@@ -20,7 +27,15 @@
             return new $model();
         }
 
-        // Load view
+        /**
+         * Include corresponding view file from a controller
+         * Best to use this function at the end of a controller method
+         * 
+         * $this->view('user/login', $response->data);
+         * 
+         * @param string $view
+         * @param array $data
+         */
         public function view($view, $data = []) {
             // Check for the view file
             if(file_exists("../app/views/{$view}.view.php")) {
@@ -32,7 +47,15 @@
             }
         }
 
-        // Validate POST request
+        /**
+         * Check if form request values are not empty
+         * $response contains two properties ($validated = boolean, $data = array)
+         * 
+         * $response = $this->validate($_POST);
+         * 
+         * @param array $request
+         * @return stdClass $response
+         */
         public function validate($request) {
             // Sanitize POST data
             $request = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);

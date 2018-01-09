@@ -15,6 +15,12 @@
 
         // ex) In controller
         //     $this->yourModel->all()
+        /**
+         * Returns all records of a model in the database as an array of objects
+         * 
+         * $this->yourModel->all();
+         * @return array $results
+         */
         public function all() {
             $this->db->query("SELECT * FROM {$this->table}");
             $results = $this->db->resultSet();
@@ -30,6 +36,19 @@
 
         // ex) In controller
         //     $this->yourModel->where(['field1', 'field2'], [default='=', '<'], ['value1', 'value2'])
+        /**
+         * Returns records of a model that match conditions as an array of objects
+         * 
+         * $this->yourModel->where(['id', 'email'], ['>', '='], [1, 'lee5250@fredonia.edu']);
+         * $this->yourModel->where(['email', 'name'], [], ['lee5250@fredonia.edu', 'deakyu']);
+         * 
+         * @param array $fields
+         * @param array $operators
+         * @param array $values
+         * 
+         * @return array $results
+         * @return boolean false
+         */
         public function where($fields = [], $operators = [], $values = []) {
             $conditions = "";
             if(count($operators) < 1) {
