@@ -15,6 +15,15 @@ function refValues($arr){
     return $arr;
 }
 
+function view($view, $data = []) {
+    if(file_exists("../app/views/{$view}.view.php")) {
+        require_once "../app/views/${view}.view.php";
+        exit();
+    } else {
+        die('View does not exit!');
+    }
+}
+
 function redirect($page) {
     header('Location: ' . URLROOT . '/' . $page);
 }

@@ -9,18 +9,28 @@
         protected $currentController = 'Page';
         protected $currentMethod = 'index';
         protected $params = [];
-
+        protected $router;
 
         /**
          * Gets url and call corresponding controller & method
          */
-        public function __construct() {
+        public function __construct($router) {
+            // Get request method
+            $requestMethod = strtolower($_SERVER['REQUEST_METHOD']) . 's';
+            // Init router
+            $this->router = $router;
+
+            $routes = $this->router->$requestMethod;
             $url = $this->getUrl();
+            if($url !== NULL) {
+                $url = $this->matchRoute($url, $routes);
+            }
+
                 
             // Look in controllers for first value of $url
-            if(file_exists('../app/controllers/'.ucwords($url[0]).'Controller.php')) {
+            if(file_exists('../app/controllers/'.$url[0].'.php')) {
                 // If exists, set as controller
-                $this->currentController = ucwords($url[0]) . 'Controller';
+                $this->currentController = $url[0];
                 // Unset 0 index -> $url now starts with index 1
                 unset($url[0]);
             } else {
@@ -47,7 +57,7 @@
 
             // Get params
             $this->params = $url ? array_values($url) : [];
-
+            // dd($this->currentMethod);
             // Call a callback with array of params
             call_user_func_array([$this->currentController, $this->currentMethod],$this->params);
         }
@@ -67,5 +77,33 @@
                 $url = explode('/', $url);
                 return $url;
             }
+        }
+
+        public function matchRoute($url, $routes) {
+            foreach($routes as $route=>$controllerAction) {
+                $tmp = ltrim($route, '/');
+                $tmp = explode('/', $tmp);
+                for($i=0 ; $i < count($url) ; $i++) {
+                    if(count($url) === count($tmp)) {
+                        if($tmp[$i] !== $url[$i] && strpos($tmp[$i], ':') !== false) {
+                            if(is_numeric($url[$i])) {
+                                $tmp[$i] = $url[$i];
+                            }
+                        }
+                    }
+                }
+                if(count(array_diff($tmp, $url)) === 0) {
+                    if(is_callable($controllerAction[count($controllerAction)-1])) {
+                        $controllerAction[0]($url[count($url)-1]);
+                        exit();
+                    }
+                    if(is_numeric($url[count($url)-1])) {
+                        array_push($controllerAction, $url[count($url)-1]);
+                    }
+                    $url = $controllerAction;
+                    break;
+                }
+            }
+            return $url;
         }
     }
