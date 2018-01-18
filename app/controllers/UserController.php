@@ -11,88 +11,92 @@
             
         }
 
-        public function register() {
-            // Check for POST
-            if($this->request_method == 'post') {
+        // Param Example
+        public function show($id) {
+            // $this->view('/users/register', ['id'=>$id]);
+        }
 
-                // validate empty inputs and spit out data and/or errors
-                $response = $this->validate($_POST);
+        // Get request for register
+        public function register() {
+            // Init Data
+            $data = [
+                'name'=>'',
+                'email'=>'',
+                'password'=>'',
+                'confirm_password'=>'',
+                'name_err'=>'',
+                'email_err'=>'',
+                'password_err'=>'',
+                'confirm_password_err'=>'',
+            ];
+
+            // Load view
+            $this->view('users/register', $data);
+        }
+
+        // Post request for register
+        public function signup() {
+            // validate empty inputs and spit out data and/or errors
+            $response = $this->validate($_POST);
                 
-                if($response->validated) {
-                    if($this->userModel->userExists($response->data['email'])) {
-                        $response->data['email_err'] = 'Email taken by someone else!';
+            if($response->validated) {
+                if($this->userModel->userExists($response->data['email'])) {
+                    $response->data['email_err'] = 'Email taken by someone else!';
+                    $this->view('users/register', $response->data);
+                } else {
+                    if($response->data['password'] != $response->data['confirm_password']) {
+                        $response->data['confirm_password_err'] = "Passwords Don't Match!";
                         $this->view('users/register', $response->data);
                     } else {
-                        if($response->data['password'] != $response->data['confirm_password']) {
-                            $response->data['confirm_password_err'] = "Passwords Don't Match!";
-                            $this->view('users/register', $response->data);
+                        $response->data['password'] = password_hash($response->data['password'], PASSWORD_DEFAULT);
+
+                        if($this->userModel->register($response->data)) {
+                            flash('register_success', 'Registered!');
+                            redirect('user/login');
                         } else {
-                            $response->data['password'] = password_hash($response->data['password'], PASSWORD_DEFAULT);
-    
-                            if($this->userModel->register($response->data)) {
-                                flash('register_success', 'Registered!');
-                                redirect('user/login');
-                            } else {
-                                die('Error registering..');
-                            }
+                            die('Error registering..');
                         }
                     }
-                } else {
-                    $this->view('users/register', $response->data);
                 }
             } else {
-                // Init Data
-                $data = [
-                    'name'=>'',
-                    'email'=>'',
-                    'password'=>'',
-                    'confirm_password'=>'',
-                    'name_err'=>'',
-                    'email_err'=>'',
-                    'password_err'=>'',
-                    'confirm_password_err'=>'',
-                ];
-
-                // Load view
-                $this->view('users/register', $data);
+                $this->view('users/register', $response->data);
             }
         }
 
+        // Get request for login form
         public function login() {
-            // Check for POST
-            if($this->request_method == 'post') {
-                // Process form
-                $response = $this->validate($_POST);
-                if($response->validated) {
-                    if($this->userModel->userExists($response->data['email'])) {
-                        // User found
-                        if($loggedUser = $this->userModel->login($response->data['email'], $response->data['password'])) {
-                            // Create session
-                            $this->createUserSession($loggedUser);
-                        } else {
-                            $response->data['password_err'] = 'Incorrect credentials, please try again';
-                            $this->view('users/login', $response->data);
-                        }
+            $data = [
+                'email'=>'',
+                'password'=>'',
+                'email_err'=>'',
+                'password_err'=>'',
+            ];
 
+            // Load view
+            $this->view('users/login', $data);
+            return true;
+        }
+
+        // Post request for login form
+        public function signin() {
+            $response = $this->validate($_POST);
+            if($response->validated) {
+                if($this->userModel->userExists($response->data['email'])) {
+                    // User found
+                    if($loggedUser = $this->userModel->login($response->data['email'], $response->data['password'])) {
+                        // Create session
+                        $this->createUserSession($loggedUser);
                     } else {
-                        $response->data['email_err'] = "Email doesn't exist";
+                        $response->data['password_err'] = 'Incorrect credentials, please try again';
                         $this->view('users/login', $response->data);
                     }
+
                 } else {
+                    $response->data['email_err'] = "Email doesn't exist";
                     $this->view('users/login', $response->data);
                 }
             } else {
-                // Init Data
-                $data = [
-                    'email'=>'',
-                    'password'=>'',
-                    'email_err'=>'',
-                    'password_err'=>'',
-                ];
-
-                // Load view
-                $this->view('users/login', $data);
-                return true;
+                $this->view('users/login', $response->data);
             }
         }
 
