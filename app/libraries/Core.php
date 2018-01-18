@@ -79,6 +79,16 @@
             }
         }
 
+        /**
+         * Matches requested url with registerd routes
+         * 
+         * $url = $this->matchRoute($url, $routes);
+         * 
+         * @param array $url
+         * @param array $routes
+         * 
+         * @return array $url
+         */
         public function matchRoute($url, $routes) {
             foreach($routes as $route=>$controllerAction) {
                 $tmp = ltrim($route, '/');

@@ -8,6 +8,7 @@
 * ``PHPUnit`` included for **unit testing**
 * ``SASS`` compliation enabled
 * Basic **grid layout system** included - ``app/assets/scss/grid.scss``
+* Router available
 
 ## Set Up
 * ``composer install`` for initiating PHPUnit for unit testing
@@ -15,6 +16,26 @@
 
 ## SASS Compilation
 * In your project root directory, open terminal and do ``sass --watch app/assets/scss/app.scss:public/css/app.css``
+
+## Routing
+* Unmatched urls will be redirected to the home page
+* Register routes in ``app/routes.php``
+```php
+    $router->get('/posts','PostController@index');
+```
+* Callback is also supported
+```php
+    $router->get('/example', function() {
+        $data = ['name'=>'John Doe'];
+        view('pages/example', $data);
+    });
+```
+* Parameters are only supported as numbers for now
+```php
+    $router->get('/example/:id', function($id) {
+        view('pages/example', ['id'=>$id]);
+    });
+```
 
 ## Controllers
 * Default controller - ``app/controllers/PageController.php``
